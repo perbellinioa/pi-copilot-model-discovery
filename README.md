@@ -10,7 +10,9 @@ The package replaces pi's static Copilot model list with the authenticated tenan
 - No model IDs, names, vendors, or families are used for routing or capabilities.
 - No reasoning levels are invented or aliased.
 - Unknown or malformed models are skipped with diagnostics rather than guessed.
-- Pi's built-in catalog remains available as the offline/startup fallback.
+- Pi's built-in catalog remains available as the first-run and offline fallback.
+- A credential-partitioned raw catalog cache provides immediate subsequent startup.
+- Fresh caches avoid the network; stale caches use ETag/Last-Modified revalidation.
 
 ## Mapping
 
@@ -66,16 +68,25 @@ Then run `/reload` in an existing session.
 /copilot-models-status   Show catalog source, model count, and refresh errors
 ```
 
-A refresh failure retains the previous live catalog. Before the first successful refresh, pi's built-in Copilot catalog remains active.
+A refresh failure retains the previous cached or live catalog. Before the first successful refresh, pi's built-in Copilot catalog remains active.
+
+The raw catalog cache is stored under:
+
+```text
+~/.pi/agent/cache/pi-copilot-model-discovery/
+```
+
+Cache filenames contain a truncated SHA-256 partition key; credentials are never stored. Cache files use mode `0600`. The default freshness interval is five minutes. Cached startup is immediate, with stale revalidation performed in the background.
 
 ## Development
 
 ```bash
 npm install
 npm run validate
+npm run benchmark
 ```
 
-Tests use provider-shaped fixtures for Claude Opus/Sonnet, GPT-5.6, Grok, and MAI. They assert that endpoint routing and reasoning values come directly from catalog fields.
+Tests use provider-shaped fixtures for Claude Opus/Sonnet, GPT-5.6, Grok, and MAI. They cover direct routing/reasoning conversion, atomic cache persistence, credential partitioning, fresh-cache network avoidance, conditional `304` revalidation, failed-network fallback, and malformed catalogs. See [BENCHMARKS.md](BENCHMARKS.md) for measured baselines.
 
 ## License
 

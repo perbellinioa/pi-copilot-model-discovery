@@ -4,7 +4,6 @@ export type CopilotEndpoint = string;
 
 export interface CopilotModelCapabilities {
   type?: string;
-  family?: string;
   limits?: {
     max_context_window_tokens?: number;
     max_non_streaming_output_tokens?: number;
@@ -48,8 +47,20 @@ export interface ConvertedCatalog {
   skipped: SkippedModel[];
 }
 
-export interface FetchCatalogResult {
-  models: CopilotCatalogModel[];
+export type FetchCatalogResult =
+  | {
+      status: "modified";
+      models: CopilotCatalogModel[];
+      etag?: string;
+      lastModified?: number;
+    }
+  | {
+      status: "not-modified";
+      etag?: string;
+      lastModified?: number;
+    };
+
+export interface CatalogValidators {
   etag?: string;
   lastModified?: number;
 }
