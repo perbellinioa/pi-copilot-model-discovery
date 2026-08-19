@@ -1,14 +1,15 @@
 import type { ModelThinkingLevel, ThinkingLevelMap } from "@earendil-works/pi-ai";
 
-const PI_LEVELS: readonly ModelThinkingLevel[] = [
-  "off",
-  "minimal",
-  "low",
-  "medium",
-  "high",
-  "xhigh",
-  "max",
-];
+// Pi may infer defaults for missing keys, so disable every level before applying provider efforts.
+const UNSUPPORTED_THINKING_LEVELS: ThinkingLevelMap = {
+  off: null,
+  minimal: null,
+  low: null,
+  medium: null,
+  high: null,
+  xhigh: null,
+  max: null,
+};
 
 const DIRECT_LEVELS = new Set<ModelThinkingLevel>(["minimal", "low", "medium", "high", "xhigh", "max"]);
 
@@ -29,7 +30,7 @@ export function reasoningFromCapabilities(
     return { reasoning: hasThinkingCapability };
   }
 
-  const map: ThinkingLevelMap = Object.fromEntries(PI_LEVELS.map((level) => [level, null]));
+  const map: ThinkingLevelMap = { ...UNSUPPORTED_THINKING_LEVELS };
   let reasoning = false;
 
   for (const rawEffort of efforts) {
