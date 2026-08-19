@@ -1,4 +1,4 @@
-import { createHash, randomUUID } from "node:crypto";
+import { createHmac, randomUUID } from "node:crypto";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import type { Credential } from "@earendil-works/pi-ai";
@@ -35,7 +35,10 @@ function isCachedCatalog(value: unknown): value is CachedCatalog {
 /** A stable, non-reversible cache partition. No credential material is stored. */
 export function catalogCacheKey(baseUrl: string, credential: Credential): string {
   const secret = credential.type === "oauth" ? credential.refresh : credential.key ?? "ambient";
-  return createHash("sha256").update(`${baseUrl}\0${secret}`).digest("hex").slice(0, 32);
+  return createHmac("sha256", "pi-copilot-model-discovery/cache-key/v1")
+    .update(`${baseUrl}\0${secret}`)
+    .digest("hex")
+    .slice(0, 32);
 }
 
 export class FileCatalogCache implements CatalogCache {
