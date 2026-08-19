@@ -5,6 +5,15 @@
   "type": "module",
   "license": "MIT",
   "author": "perbellinioa",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/perbellinioa/pi-copilot-model-discovery.git"
+  },
+  "bugs": {
+    "url": "https://github.com/perbellinioa/pi-copilot-model-discovery/issues"
+  },
+  "homepage": "https://github.com/perbellinioa/pi-copilot-model-discovery#readme",
+  "packageManager": "npm@11.17.0",
   "keywords": [
     "pi-package",
     "pi",
@@ -16,6 +25,8 @@
     "src/",
     "README.md",
     "BENCHMARKS.md",
+    "SECURITY.md",
+    "CONTRIBUTING.md",
     "LICENSE"
   ],
   "pi": {
@@ -27,7 +38,8 @@
     "check": "tsc --noEmit",
     "test": "node --import tsx --test test/**/*.test.ts",
     "benchmark": "tsx scripts/benchmark.ts",
-    "validate": "npm run check && npm test"
+    "validate": "npm run check && npm test",
+    "prepublishOnly": "npm run validate"
   },
   "peerDependencies": {
     "@earendil-works/pi-ai": "^0.84.0",

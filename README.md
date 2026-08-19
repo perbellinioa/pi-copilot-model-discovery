@@ -94,6 +94,10 @@ npm run benchmark
 
 Tests use provider-shaped fixtures for Claude Opus/Sonnet, GPT-5.6, Grok, and MAI. They cover direct routing/reasoning conversion, atomic cache persistence, credential partitioning, fresh-cache network avoidance, conditional `304` revalidation, failed-network fallback, and malformed catalogs. See [BENCHMARKS.md](BENCHMARKS.md) for measured baselines.
 
+## Contributing and security
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development expectations. Report vulnerabilities according to [SECURITY.md](SECURITY.md), not through public issues.
+
 ## License
 
 MIT
