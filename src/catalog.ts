@@ -22,6 +22,27 @@ function modelHeaders(headers: ProviderHeaders | undefined): Record<string, stri
   return entries.length > 0 ? Object.fromEntries(entries) : undefined;
 }
 
+function compatibilityFor(
+  api: Api,
+  adaptiveThinking: boolean,
+  reasoning: boolean,
+): Model<Api>["compat"] {
+  if (api === "anthropic-messages") {
+    return {
+      supportsEagerToolInputStreaming: false,
+      ...(adaptiveThinking ? { forceAdaptiveThinking: true } : {}),
+    } as Model<Api>["compat"];
+  }
+  if (api === "openai-completions") {
+    return {
+      supportsStore: false,
+      supportsDeveloperRole: false,
+      supportsReasoningEffort: reasoning,
+    } as Model<Api>["compat"];
+  }
+  return undefined;
+}
+
 function convertModel(
   raw: CopilotCatalogModel,
   options: ConvertCatalogOptions,
@@ -48,17 +69,7 @@ function convertModel(
   );
   const builtin = builtinById.get(raw.id);
   const headers = modelHeaders(builtin?.headers ?? options.fallbackHeaders);
-  const compat = {
-    ...(api === "anthropic-messages"
-      ? {
-          supportsEagerToolInputStreaming: false,
-          ...(supports?.adaptive_thinking === true ? { forceAdaptiveThinking: true } : {}),
-        }
-      : {}),
-    ...(api === "openai-completions"
-      ? { supportsStore: false, supportsDeveloperRole: false, supportsReasoningEffort: reasoning.reasoning }
-      : {}),
-  } as Model<Api>["compat"];
+  const compat = compatibilityFor(api, supports?.adaptive_thinking === true, reasoning.reasoning);
 
   return {
     model: {
@@ -74,7 +85,7 @@ function convertModel(
       contextWindow,
       maxTokens,
       headers,
-      compat: Object.keys(compat ?? {}).length > 0 ? compat : undefined,
+      compat,
     } as Model<Api>,
   };
 }

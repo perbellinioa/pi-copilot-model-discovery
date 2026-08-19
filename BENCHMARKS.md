@@ -6,11 +6,11 @@ The benchmark converts a synthetic 250-model provider catalog 2,000 times after 
 
 | Metric | Result |
 | --- | ---: |
-| Mean conversion | 0.3630 ms |
-| p50 | 0.3049 ms |
-| p95 | 0.6379 ms |
-| p99 | 0.9461 ms |
-| Throughput | 688,652 models/sec |
+| Mean conversion | 0.1940 ms |
+| p50 | 0.1509 ms |
+| p95 | 0.4508 ms |
+| p99 | 0.9192 ms |
+| Throughput | 1,288,574 models/sec |
 
 Network latency, not catalog conversion, dominates refresh cost. The runtime therefore uses a credential-partitioned raw-catalog cache, a five-minute freshness window, and HTTP ETag/Last-Modified revalidation. A fresh cache performs no network request during startup.
 

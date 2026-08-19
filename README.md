@@ -33,6 +33,10 @@ Only protocol and schema adaptation is performed:
 
 Grok and MAI require no special cases: their current catalog entries advertise `/responses`, so they automatically use pi's OpenAI Responses transport.
 
+### Availability filtering
+
+The authenticated live catalog is authoritative for model availability. Entries explicitly marked with `model_picker_enabled: false` or `policy.state: disabled` are excluded. The extension intentionally does not reapply pi's built-in static model-ID filter afterward, because doing so would hide newly discovered tenant models that are not yet present in pi's bundled catalog.
+
 ## Requirements
 
 - pi 0.84 or newer
@@ -77,6 +81,8 @@ The raw catalog cache is stored under:
 ```
 
 Cache filenames contain a truncated SHA-256 partition key; credentials are never stored. Cache files use mode `0600`. The default freshness interval is five minutes. Cached startup is immediate, with stale revalidation performed in the background.
+
+This package intentionally uses a namespaced cache instead of pi's provider-ID-keyed model store. A single provider ID can serve multiple Copilot accounts or enterprise tenants; credential partitioning prevents one account's cached catalog from being shown after switching to another.
 
 ## Development
 

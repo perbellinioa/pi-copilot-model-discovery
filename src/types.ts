@@ -6,23 +6,13 @@ export interface CopilotModelCapabilities {
   type?: string;
   limits?: {
     max_context_window_tokens?: number;
-    max_non_streaming_output_tokens?: number;
     max_output_tokens?: number;
     max_prompt_tokens?: number;
-    vision?: {
-      max_prompt_image_size?: number;
-      max_prompt_images?: number;
-      supported_media_types?: string[];
-    };
   };
   supports?: {
     adaptive_thinking?: boolean;
     max_thinking_budget?: number;
-    min_thinking_budget?: number;
-    parallel_tool_calls?: boolean;
     reasoning_effort?: string[];
-    streaming?: boolean;
-    structured_outputs?: boolean;
     tool_calls?: boolean;
     vision?: boolean;
   };

@@ -109,6 +109,7 @@ test("uses built-in fallback, writes live data, restores cache, and revalidates 
   assert.equal(first.provider.getModels()[0]?.thinkingLevelMap?.max, "max");
   assert.equal(requests, 1);
   assert.equal(cache.writes, 1);
+  assert.equal(typeof first.state.lastDurationMs, "number");
 
   let revalidationHeaders: Headers | undefined;
   const notModifiedFetch: typeof globalThis.fetch = async (_input, init) => {
@@ -123,11 +124,14 @@ test("uses built-in fallback, writes live data, restores cache, and revalidates 
   });
   await second.provider.refreshModels?.(context({ allowNetwork: false }));
   assert.equal(second.state.source, "cache");
+  assert.equal(second.state.lastDurationMs, undefined);
   assert.equal(second.provider.getModels()[0]?.id, "live-model");
   assert.equal(second.state.cacheHits, 1);
 
   await second.provider.refreshModels?.(context({ allowNetwork: true }));
   assert.equal(requests, 1, "fresh cache must avoid the network");
+  assert.equal(second.state.lastDurationMs, undefined, "cache fast path must not report stale network timing");
+  assert.equal(second.state.cacheAgeMs, 0);
 
   now += 10 * 60_000;
   await second.provider.refreshModels?.(context({ allowNetwork: true }));
@@ -135,6 +139,8 @@ test("uses built-in fallback, writes live data, restores cache, and revalidates 
   assert.equal(revalidationHeaders?.get("if-none-match"), '"one"');
   assert.equal(second.provider.getModels()[0]?.id, "live-model");
   assert.equal(second.state.error, undefined);
+  assert.equal(typeof second.state.lastDurationMs, "number");
+  assert.equal(second.state.cacheAgeMs, 0);
 });
 
 test("retains cached models when network revalidation fails", async () => {
