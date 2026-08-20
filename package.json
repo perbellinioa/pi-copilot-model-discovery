@@ -27,6 +27,7 @@
     "BENCHMARKS.md",
     "SECURITY.md",
     "CONTRIBUTING.md",
+    "RELEASING.md",
     "LICENSE"
   ],
   "pi": {

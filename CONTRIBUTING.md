@@ -30,3 +30,5 @@ npm run benchmark
 - Run `npm run benchmark` for conversion-path changes and document meaningful regressions or improvements.
 - Do not commit credentials, auth files, tenant catalog captures, session files, or cache files.
 - Provider-data examples must be sanitized and reduced to the fields required by the test.
+
+Maintainers should follow [RELEASING.md](RELEASING.md) for versioning and trusted npm publication.

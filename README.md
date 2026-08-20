@@ -1,5 +1,9 @@
 # pi-copilot-model-discovery
 
+[![CI](https://github.com/perbellinioa/pi-copilot-model-discovery/actions/workflows/ci.yml/badge.svg)](https://github.com/perbellinioa/pi-copilot-model-discovery/actions/workflows/ci.yml)
+[![npm version](https://img.shields.io/npm/v/pi-copilot-model-discovery.svg)](https://www.npmjs.com/package/pi-copilot-model-discovery)
+[![license](https://img.shields.io/npm/l/pi-copilot-model-discovery.svg)](LICENSE)
+
 Lean, provider-driven GitHub Copilot model discovery for [pi](https://github.com/earendil-works/pi-mono).
 
 The package replaces pi's static Copilot model list with the authenticated tenant's live `/models` catalog while preserving pi's built-in authentication, token refresh, enterprise endpoint resolution, request transport, and streaming implementations.
@@ -96,7 +100,7 @@ Tests use provider-shaped fixtures for Claude Opus/Sonnet, GPT-5.6, Grok, and MA
 
 ## Contributing and security
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development expectations. Report vulnerabilities according to [SECURITY.md](SECURITY.md), not through public issues.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development expectations and [RELEASING.md](RELEASING.md) for the trusted publication process. Report vulnerabilities according to [SECURITY.md](SECURITY.md), not through public issues.
 
 ## License
 
