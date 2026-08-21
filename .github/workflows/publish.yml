@@ -43,5 +43,5 @@ jobs:
       - name: Validate package
         run: npm run validate
 
-      - name: Publish with provenance
-        run: npm publish --access public --provenance
+      - name: Stage package with provenance
+        run: npm stage publish --access public --provenance

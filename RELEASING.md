@@ -1,11 +1,11 @@
 # Releasing
 
-Releases are published to npm by `.github/workflows/publish.yml` using GitHub OIDC trusted publishing. Do not add an npm token to the repository.
+Releases are staged on npm by `.github/workflows/publish.yml` using GitHub OIDC trusted publishing, then approved manually with 2FA. Do not add an npm token to the repository.
 
 ## Prerequisites
 
 - Start from an up-to-date `main` branch.
-- The npm package's trusted publisher must point to `perbellinioa/pi-copilot-model-discovery` and `publish.yml`.
+- The npm package's trusted publisher must point to `perbellinioa/pi-copilot-model-discovery` and `publish.yml`, with **stage publish** permission.
 - Traditional npm tokens should remain disallowed for publishing.
 - Node 22, Node 24, and CodeQL checks must pass.
 
@@ -56,8 +56,32 @@ gh release create v0.1.1 \
 The workflow verifies the tag, installs without lifecycle scripts, runs validation, and executes:
 
 ```bash
-npm publish --access public --provenance
+npm stage publish --access public --provenance
 ```
+
+## Review and approve
+
+The staged package is not public until a maintainer approves it with 2FA. Inspect it before approval:
+
+```bash
+npm stage list pi-copilot-model-discovery
+npm stage view <stage-id>
+npm stage download <stage-id>
+```
+
+Approve a valid package:
+
+```bash
+npm stage approve <stage-id>
+```
+
+Reject an invalid package instead:
+
+```bash
+npm stage reject <stage-id>
+```
+
+The same review and approval actions are available in npmjs.com's **Staged Packages** tab.
 
 ## Verify
 
@@ -79,6 +103,7 @@ Confirm `/copilot-models-status` reports a usable catalog and the expected versi
 
 npm versions are immutable and must never be overwritten.
 
-- If the workflow fails before npm publication, fix the issue through a pull request. Delete and recreate the GitHub release/tag only when the version is confirmed absent from npm.
-- If npm publication succeeded but later verification fails, publish a corrected patch version.
+- If staging fails, fix the issue through a pull request. Delete and recreate the GitHub release/tag only when the version is confirmed absent from both staged and published packages.
+- If staged inspection fails, reject the stage and publish a corrected patch version; do not reuse the rejected version.
+- If npm approval succeeded but later verification fails, publish a corrected patch version.
 - Deprecate a broken version rather than attempting to reuse it.
