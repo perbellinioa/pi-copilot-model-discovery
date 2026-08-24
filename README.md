@@ -49,7 +49,7 @@ The authenticated live catalog is authoritative for model availability. Entries 
 
 ## Install
 
-From npm after publication:
+From npm:
 
 ```bash
 pi install npm:pi-copilot-model-discovery
